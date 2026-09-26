@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Baba Is You 網頁版</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1><span class="t-noun">BABA</span> <span class="t-op">IS</span> <span class="t-you">YOU</span></h1>
+    <p class="subtitle">網頁版解謎遊戲：推動文字方塊，改寫這個世界的規則。</p>
+  </header>
+
+  <main>
+    <!-- 關卡選單 -->
+    <section id="menu" class="screen">
+      <div class="menu-head">
+        <h2>選擇關卡</h2>
+        <span id="progress" class="progress"></span>
+      </div>
+      <div id="level-grid" class="level-grid"></div>
+      <details class="howto" open>
+        <summary>遊戲規則說明</summary>
+        <div class="howto-body">
+          <p>場上的文字方塊可以被推動。當它們<strong>由左到右</strong>或<strong>由上到下</strong>排成
+            <code>名詞 IS 屬性</code> 的句子時，規則就會立刻生效；把句子拆開，規則就會消失。</p>
+          <p>讓「YOU」的物體碰到「WIN」的物體就能過關。</p>
+          <table>
+            <thead><tr><th>屬性</th><th>效果</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip" data-p="you">YOU</span></td><td>由你操控</td></tr>
+              <tr><td><span class="chip" data-p="win">WIN</span></td><td>YOU 碰到就過關</td></tr>
+              <tr><td><span class="chip" data-p="stop">STOP</span></td><td>無法穿過</td></tr>
+              <tr><td><span class="chip" data-p="push">PUSH</span></td><td>可以被推動（文字方塊一定可以推）</td></tr>
+              <tr><td><span class="chip" data-p="pull">PULL</span></td><td>會被拉著跟在後面</td></tr>
+              <tr><td><span class="chip" data-p="defeat">DEFEAT</span></td><td>摧毀碰到它的 YOU</td></tr>
+              <tr><td><span class="chip" data-p="sink">SINK</span></td><td>和碰到它的東西一起消失</td></tr>
+              <tr><td><span class="chip" data-p="hot">HOT</span> / <span class="chip" data-p="melt">MELT</span></td><td>HOT 會熔化 MELT</td></tr>
+              <tr><td><span class="chip" data-p="open">OPEN</span> / <span class="chip" data-p="shut">SHUT</span></td><td>兩者相遇時一起消失</td></tr>
+              <tr><td><span class="chip" data-p="move">MOVE</span></td><td>每回合自己往前走，撞到就回頭</td></tr>
+              <tr><td><span class="chip" data-p="float">FLOAT</span></td><td>漂浮，只會碰到同樣漂浮的東西</td></tr>
+              <tr><td><span class="chip" data-p="weak">WEAK</span></td><td>碰到任何東西就壞掉</td></tr>
+              <tr><td><span class="chip" data-p="tele">TELE</span></td><td>把站上來的東西傳送到另一個同類物體</td></tr>
+              <tr><td><span class="chip" data-p="shift">SHIFT</span></td><td>像輸送帶一樣移動上面的東西</td></tr>
+            </tbody>
+          </table>
+          <p>進階語法：</p>
+          <ul>
+            <li><code>ROCK IS FLAG</code>：把所有石頭變成旗子（<code>X IS X</code> 可防止被變形）。</li>
+            <li><code>BABA AND KEKE IS YOU</code>、<code>FLAG IS WIN AND PUSH</code>：用 AND 連接。</li>
+            <li><code>WALL IS NOT STOP</code>、<code>NOT BABA IS ...</code>：NOT 會否定，並推翻相反的規則。</li>
+            <li><code>ROCK HAS KEY</code>：石頭被摧毀時會留下鑰匙。</li>
+            <li><code>ROCK ON GRASS</code>、<code>ROCK NEAR SKULL</code>、<code>BABA FACING FLAG</code>：條件式規則。</li>
+          </ul>
+          <p>操作：方向鍵或 WASD 移動、空白鍵等待、Z 復原、R 重來、Esc 回選單。</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- 遊戲畫面 -->
+    <section id="game" class="screen hidden">
+      <div class="game-head">
+        <button id="btn-menu" class="btn" title="回到選單 (Esc)">← 選單</button>
+        <h2 id="level-title"></h2>
+        <div class="head-actions">
+          <button id="btn-undo" class="btn" title="復原 (Z)">復原 Z</button>
+          <button id="btn-restart" class="btn" title="重來 (R)">重來 R</button>
+        </div>
+      </div>
+      <p id="level-hint" class="hint"></p>
+      <div id="board-wrap" class="board-wrap">
+        <canvas id="board"></canvas>
+        <div id="overlay" class="overlay hidden">
+          <div class="overlay-box">
+            <p id="overlay-text" class="overlay-text"></p>
+            <div class="overlay-actions">
+              <button id="btn-next" class="btn primary">下一關 ↵</button>
+              <button id="btn-overlay-menu" class="btn">回選單</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p id="status" class="status" aria-live="polite"></p>
+      <div class="rules-panel">
+        <h3>目前生效的規則</h3>
+        <ul id="rule-list" class="rule-list"></ul>
+      </div>
+      <div class="dpad" aria-label="觸控操作">
+        <button data-move="up" class="btn pad up" aria-label="上">▲</button>
+        <button data-move="left" class="btn pad left" aria-label="左">◀</button>
+        <button data-move="wait" class="btn pad wait" aria-label="等待">●</button>
+        <button data-move="right" class="btn pad right" aria-label="右">▶</button>
+        <button data-move="down" class="btn pad down" aria-label="下">▼</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    致敬 Arvi Teikari（Hempuli）的原作《Baba Is You》。本專案為學習用途的同人重製，所有圖像皆以程式繪製。
+  </footer>
+
+  <script src="js/engine.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
