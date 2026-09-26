@@ -73,11 +73,20 @@ h3 { margin: 0 0 8px; font-size: 15px; color: var(--muted); font-weight: 600; }
 
 .menu-head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   margin: 16px 0 12px;
 }
 .progress { color: var(--muted); }
+.menu-actions { display: flex; align-items: center; gap: 12px; }
+
+.install-tip {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+}
 
 .level-grid {
   display: grid;

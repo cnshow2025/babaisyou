@@ -211,4 +211,47 @@
   });
 
   showMenu();
+
+  // ---------- 安裝（PWA） ----------
+
+  const installBtn = $('btn-install');
+  const installTip = $('install-tip');
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  let installPrompt = null;
+
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  // Chrome／Edge／Android：瀏覽器確認可以安裝時才顯示按鈕
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    installPrompt = e;
+    installBtn.classList.remove('hidden');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installPrompt = null;
+    installBtn.classList.add('hidden');
+    installTip.classList.add('hidden');
+  });
+
+  // iPhone／iPad 沒有安裝事件，改為顯示手動加入主畫面的說明
+  if (isIOS && !standalone && location.protocol !== 'file:') {
+    installBtn.classList.remove('hidden');
+  }
+
+  installBtn.addEventListener('click', async () => {
+    if (installPrompt) {
+      installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      if (choice.outcome === 'accepted') installBtn.classList.add('hidden');
+      installPrompt = null;
+    } else if (isIOS) {
+      installTip.textContent = '在 Safari 下方點「分享」按鈕（方框加向上箭頭），再選「加入主畫面」即可安裝。';
+      installTip.classList.toggle('hidden');
+    }
+  });
 })();

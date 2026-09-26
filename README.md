@@ -18,6 +18,18 @@
 
 手機上可以用畫面下方的方向鍵，或直接在棋盤上滑動。過關進度會儲存在瀏覽器中。
 
+## 安裝成 App
+
+遊戲網址：**https://cnshow2025.github.io/babaisyou/**（需先在 repo 設定開啟 GitHub Pages）
+
+這是一個 PWA（可安裝的網頁應用程式），安裝後會出現在主畫面或應用程式清單中，全螢幕開啟，**沒有網路也能玩**。
+
+- **電腦（Chrome／Edge）與 Android**：點選單上的「⬇ 安裝遊戲」按鈕，或網址列右側的安裝圖示。
+- **iPhone／iPad**：用 Safari 開啟，點下方的「分享」按鈕，再選「加入主畫面」。
+
+安裝功能需要透過 HTTPS 網址開啟；直接雙擊 `index.html` 仍然可以玩，但不會出現安裝選項。
+推送新版本後，App 會在背景下載新檔案，下一次開啟時就會更新。
+
 ## 規則
 
 文字方塊由左到右或由上到下排成句子時，規則就會生效：
@@ -52,7 +64,10 @@ style.css         樣式
 js/engine.js      遊戲引擎：規則解析、移動、互動判定（不依賴 DOM）
 js/levels.js      20 個關卡的地圖資料
 js/render.js      Canvas 繪圖與移動動畫
-js/main.js        輸入、復原、過關流程與進度儲存
+js/main.js        輸入、復原、過關流程、進度儲存與安裝按鈕
+manifest.webmanifest  PWA 設定（名稱、圖示、顏色）
+sw.js             Service Worker：離線快取
+icons/            App 圖示
 tools/verify.js   關卡驗證工具
 tools/solutions.json  每一關的參考解法（有雷！）
 ```

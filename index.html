@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Baba Is You 網頁版</title>
+  <meta name="theme-color" content="#0e1015">
+  <meta name="description" content="推動文字方塊、改寫世界規則的解謎遊戲，共 20 關。">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Baba Is You">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,8 +26,12 @@
     <section id="menu" class="screen">
       <div class="menu-head">
         <h2>選擇關卡</h2>
-        <span id="progress" class="progress"></span>
+        <div class="menu-actions">
+          <button id="btn-install" class="btn primary hidden">⬇ 安裝遊戲</button>
+          <span id="progress" class="progress"></span>
+        </div>
       </div>
+      <p id="install-tip" class="install-tip hidden"></p>
       <div id="level-grid" class="level-grid"></div>
       <details class="howto" open>
         <summary>遊戲規則說明</summary>
