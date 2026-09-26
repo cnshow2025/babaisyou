@@ -23,15 +23,14 @@
   const label = word => LABELS[word] || word;
   const OPPOSITE = { up: 'down', down: 'up', left: 'right', right: 'left' };
 
+  const CATEGORY = new Map([
+    ...NOUNS.map(w => [w, 'noun']), ...PROPS.map(w => [w, 'prop']),
+    ...CONDS.map(w => [w, 'cond']), ...VERBS.map(w => [w, 'verb']),
+    ['not', 'not'], ['and', 'and'],
+  ]);
+
   function category(word) {
-    if (word == null) return null;
-    if (NOUNS.includes(word)) return 'noun';
-    if (PROPS.includes(word)) return 'prop';
-    if (CONDS.includes(word)) return 'cond';
-    if (VERBS.includes(word)) return 'verb';
-    if (word === 'not') return 'not';
-    if (word === 'and') return 'and';
-    return null;
+    return CATEGORY.get(word) || null;
   }
 
   // ---------- 狀態 ----------
@@ -197,15 +196,15 @@
   }
 
   function parseRules(state) {
-    const grid = new Map();
+    const grid = new Array(state.w * state.h);
     for (const o of state.objs) {
       if (o.type !== 'text') continue;
-      const key = o.x + ',' + o.y;
-      const prev = grid.get(key);
-      if (!prev || prev.id < o.id) grid.set(key, o);
+      const key = o.y * state.w + o.x;
+      const prev = grid[key];
+      if (!prev || prev.id < o.id) grid[key] = o;
     }
     const out = { rules: [], keys: new Set(), active: new Set() };
-    const at = (x, y) => grid.get(x + ',' + y);
+    const at = (x, y) => grid[y * state.w + x];
     for (let y = 0; y < state.h; y++) {
       let seg = [];
       for (let x = 0; x <= state.w; x++) {
@@ -256,13 +255,13 @@
   // 分析目前狀態：解析規則並計算每個物體的屬性。
   function analyze(state) {
     const parsed = parseRules(state);
+    const propRules = parsed.rules.filter(r => r.verb === 'is' && category(r.obj) === 'prop');
     const props = new Map();
     for (const o of state.objs) {
       const pos = new Set();
       const neg = new Set();
       if (o.type === 'text') pos.add('push');
-      for (const r of parsed.rules) {
-        if (r.verb !== 'is' || category(r.obj) !== 'prop') continue;
+      for (const r of propRules) {
         if (!ruleApplies(state, r, o)) continue;
         (r.objNeg ? neg : pos).add(r.obj);
       }
@@ -333,6 +332,7 @@
       o.dir = dir;
       if (canMove(state, ctx, o, dir)) doMove(state, ctx, o, dir, moved);
     }
+    return yous.length > 0;
   }
 
   function movePhase(state, ctx) {
@@ -347,6 +347,7 @@
         if (canMove(state, ctx, o, o.dir)) doMove(state, ctx, o, o.dir, moved);
       }
     }
+    return movers.length > 0;
   }
 
   const floatOf = (ctx, o) => ctx.has(o, 'float');
@@ -365,6 +366,7 @@
       p.dir = dir;
       if (canMove(state, ctx, p, dir)) doMove(state, ctx, p, dir, moved);
     }
+    return plans.length > 0;
   }
 
   // ---------- 變形 ----------
@@ -406,7 +408,9 @@
 
   // ---------- 傳送 ----------
 
-  function telePhase(state, ctx) {
+  // 只有這回合「移動到」傳送點上的物體才會被傳送（停在上面不動的不會一直來回傳送）。
+  function telePhase(state, ctx, before) {
+    const startPos = new Map(before.objs.map(o => [o.id, o]));
     const teles = state.objs.filter(o => ctx.has(o, 'tele'));
     const byType = new Map();
     for (const t of teles) {
@@ -423,6 +427,8 @@
         for (const p of objsAt(state, t.x, t.y)) {
           if (ctx.has(p, 'tele')) continue;
           if (floatOf(ctx, p) !== floatOf(ctx, t)) continue;
+          const from = startPos.get(p.id);
+          if (!from || (from.x === p.x && from.y === p.y)) continue;
           plans.push([p, dest.x, dest.y]);
         }
       });
@@ -434,6 +440,7 @@
       p.x = x;
       p.y = y;
     }
+    return plans.length > 0;
   }
 
   // ---------- 摧毀與互動 ----------
@@ -531,20 +538,17 @@
   // ---------- 一個回合 ----------
 
   // dir 為 'up' | 'down' | 'left' | 'right'，或 null 表示等待。
+  // 每個階段只有在真的有物體移動或改變時，才重新分析規則。
   function step(state, dir) {
     const s = cloneState(state);
     let ctx = analyze(s);
-    if (dir) youPhase(s, ctx, dir);
-    ctx = analyze(s);
-    movePhase(s, ctx);
-    ctx = analyze(s);
-    shiftPhase(s, ctx);
-    ctx = analyze(s);
+    if (dir && youPhase(s, ctx, dir)) ctx = analyze(s);
+    if (movePhase(s, ctx)) ctx = analyze(s);
+    if (shiftPhase(s, ctx)) ctx = analyze(s);
     if (transformPhase(s, ctx)) ctx = analyze(s);
-    telePhase(s, ctx);
-    ctx = analyze(s);
+    if (telePhase(s, ctx, state)) ctx = analyze(s);
     const events = interactionPhase(s, ctx);
-    ctx = analyze(s);
+    if (events.size) ctx = analyze(s);
     const win = checkWin(s, ctx);
     const hasYou = s.objs.some(o => ctx.has(o, 'you'));
     return { state: s, ctx, win, hasYou, events: [...events] };

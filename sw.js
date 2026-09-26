@@ -3,7 +3,7 @@
 // 所以推送新版本後，下一次開啟就會使用新檔案。
 'use strict';
 
-const CACHE = 'baba-web-v1';
+const CACHE = 'baba-web-v2';
 const FILES = [
   './',
   './index.html',

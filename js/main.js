@@ -46,16 +46,41 @@
     current = -1;
     gameEl.classList.add('hidden');
     menuEl.classList.remove('hidden');
-    const grid = $('level-grid');
-    grid.innerHTML = '';
-    LEVELS.forEach((lv, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'level-btn' + (completed.has(i) ? ' done' : '');
-      btn.innerHTML = `<span class="num">${i + 1}</span><span class="name"></span>`;
-      btn.querySelector('.name').textContent = lv.name;
-      btn.addEventListener('click', () => startLevel(i));
-      grid.appendChild(btn);
-    });
+    const wrap = $('level-grid');
+    wrap.innerHTML = '';
+    // 沒有難度星等的是基礎篇，有星等的是進階篇
+    const sections = [
+      { title: '基礎篇', levels: LEVELS.map((lv, i) => i).filter(i => !LEVELS[i].stars) },
+      { title: '進階篇', levels: LEVELS.map((lv, i) => i).filter(i => LEVELS[i].stars) },
+    ];
+    for (const sec of sections) {
+      if (!sec.levels.length) continue;
+      const first = sec.levels[0] + 1, last = sec.levels[sec.levels.length - 1] + 1;
+      const h = document.createElement('h3');
+      h.className = 'section-title';
+      h.textContent = `${sec.title}（第 ${first}～${last} 關）`;
+      wrap.appendChild(h);
+      const grid = document.createElement('div');
+      grid.className = 'level-grid';
+      for (const i of sec.levels) {
+        const lv = LEVELS[i];
+        const btn = document.createElement('button');
+        btn.className = 'level-btn' + (completed.has(i) ? ' done' : '');
+        btn.dataset.level = i + 1;
+        btn.innerHTML = `<span class="num">${i + 1}</span><span class="name"></span>`;
+        btn.querySelector('.name').textContent = lv.name;
+        if (lv.stars) {
+          const st = document.createElement('span');
+          st.className = 'stars';
+          st.textContent = '★'.repeat(lv.stars);
+          st.title = `難度 ${lv.stars} 顆星`;
+          btn.appendChild(st);
+        }
+        btn.addEventListener('click', () => startLevel(i));
+        grid.appendChild(btn);
+      }
+      wrap.appendChild(grid);
+    }
     $('progress').textContent = `已完成 ${completed.size} / ${LEVELS.length}`;
   }
 
@@ -67,7 +92,7 @@
     const def = parseLevel(lv);
     menuEl.classList.add('hidden');
     gameEl.classList.remove('hidden');
-    $('level-title').textContent = `第 ${i + 1} 關：${lv.name}`;
+    $('level-title').textContent = `第 ${i + 1} 關：${lv.name}` + (lv.stars ? '　' + '★'.repeat(lv.stars) : '');
     $('level-hint').textContent = lv.hint;
     history = [];
     won = false;
@@ -138,7 +163,7 @@
     completed.add(current);
     saveProgress(completed);
     const last = current === LEVELS.length - 1;
-    $('overlay-text').textContent = last ? '恭喜！全部 20 關都過關了！' : '過關！';
+    $('overlay-text').textContent = last ? `恭喜！全部 ${LEVELS.length} 關都過關了！` : '過關！';
     $('btn-next').classList.toggle('hidden', last);
     setTimeout(() => {
       overlayEl.classList.remove('hidden');

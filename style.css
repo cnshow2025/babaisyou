@@ -114,6 +114,20 @@ h3 { margin: 0 0 8px; font-size: 15px; color: var(--muted); font-weight: 600; }
   color: var(--accent);
 }
 .level-btn .name { font-size: 14px; }
+.level-btn .stars {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--win);
+  margin-top: 2px;
+}
+
+.section-title {
+  margin: 18px 0 10px;
+  font-size: 16px;
+  color: var(--text);
+}
+.section-title:first-child { margin-top: 0; }
 .level-btn.done .num { color: var(--win); }
 .level-btn.done::after {
   content: "✓";
