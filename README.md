@@ -34,27 +34,27 @@
 
 文字方塊由左到右或由上到下排成句子時，規則就會生效：
 
-- **名詞**：BABA、KEKE、FLAG、WALL、ROCK、WATER、SKULL、LAVA、KEY、DOOR、GRASS、TEXT
-- **連接詞**：IS、AND、NOT、HAS、ON、NEAR、FACING
-- **屬性**：YOU、WIN、STOP、PUSH、PULL、DEFEAT、SINK、HOT、MELT、OPEN、SHUT、MOVE、FLOAT、WEAK、TELE、SHIFT
+- **名詞**：巴巴、可可、旗子、牆、石頭、水、骷髏、熔岩、鑰匙、門、草、文字
+- **連接詞**：是、和、非、有、站在、靠近、面向
+- **屬性**：你、贏、停、推、拉、擊敗、沉、燙、融化、開、關、移動、漂浮、弱、傳送、輸送
 
 進階語法範例：
 
-- `ROCK IS FLAG`：物體變形；`BABA IS BABA` 可防止被變形
-- `BABA AND KEKE IS YOU`、`FLAG IS WIN AND PUSH`
-- `WALL IS NOT STOP`：NOT 會推翻相反的規則
-- `ROCK HAS KEY`：石頭被摧毀時會留下鑰匙
-- `ROCK ON GRASS IS FLAG`、`ROCK NEAR SKULL IS KEY`、`BABA FACING FLAG IS WIN`：條件式規則
+- `石頭 是 旗子`：物體變形；`巴巴 是 巴巴` 可防止被變形
+- `巴巴 和 可可 是 你`、`旗子 是 贏 和 推`
+- `牆 是 非 停`：「非」會推翻相反的規則
+- `石頭 有 鑰匙`：石頭被摧毀時會留下鑰匙
+- `石頭 站在 草 是 旗子`、`石頭 靠近 骷髏 是 鑰匙`、`巴巴 面向 旗子 是 贏`：條件式規則
 
 ## 關卡
 
 | 關卡 | 主題 |
 |------|------|
-| 1–4 | YOU、WIN、PUSH、STOP，拆掉規則與組成規則 |
-| 5–8 | 更換 YOU、`BABA IS WIN`、SINK、DEFEAT |
-| 9–12 | HOT／MELT、OPEN／SHUT、物體變形、AND |
-| 13–17 | NOT、HAS、MOVE、PULL、TELE 與 FLOAT |
-| 18–20 | 條件式規則 ON、FACING、NEAR，以及 SHIFT 綜合關卡 |
+| 1–4 | 你、贏、推、停，拆掉規則與組成規則 |
+| 5–8 | 更換「你」、`巴巴 是 贏`、沉、擊敗 |
+| 9–12 | 燙／融化、開／關、物體變形、和 |
+| 13–17 | 非、有、移動、拉、傳送與漂浮 |
+| 18–20 | 條件式規則站在、面向、靠近，以及輸送綜合關卡 |
 
 ## 專案結構
 
@@ -85,9 +85,9 @@ node tools/verify.js 7 -v     # 逐步印出第 7 關的盤面與規則
 
 在 `js/levels.js` 的 `LEVELS` 陣列中加入新的地圖。每個字元代表一格：
 
-- 物體（小寫）：`b` baba、`k` keke、`f` flag、`w` wall、`r` rock、`~` water、`s` skull、`l` lava、`y` key、`d` door、`g` grass
-- 名詞文字：`B` `K` `F` `W` `R` `A`(WATER) `S` `L` `Y`(KEY) `D` `G` `T`(TEXT)
-- 連接詞：`=` IS、`&` AND、`!` NOT、`H` HAS、`O` ON、`N` NEAR、`C` FACING
-- 屬性：`U` YOU、`V` WIN、`X` STOP、`P` PUSH、`Q` PULL、`E` DEFEAT、`I` SINK、`1` HOT、`2` MELT、`3` OPEN、`4` SHUT、`M` MOVE、`5` FLOAT、`6` WEAK、`7` TELE、`8` SHIFT
+- 物體（小寫）：`b` 巴巴、`k` 可可、`f` 旗子、`w` 牆、`r` 石頭、`~` 水、`s` 骷髏、`l` 熔岩、`y` 鑰匙、`d` 門、`g` 草
+- 名詞文字：`B` 巴巴、`K` 可可、`F` 旗子、`W` 牆、`R` 石頭、`A` 水、`S` 骷髏、`L` 熔岩、`Y` 鑰匙、`D` 門、`G` 草、`T` 文字
+- 連接詞：`=` 是、`&` 和、`!` 非、`H` 有、`O` 站在、`N` 靠近、`C` 面向
+- 屬性：`U` 你、`V` 贏、`X` 停、`P` 推、`Q` 拉、`E` 擊敗、`I` 沉、`1` 燙、`2` 融化、`3` 開、`4` 關、`M` 移動、`5` 漂浮、`6` 弱、`7` 傳送、`8` 輸送
 
 新增關卡後，記得在 `tools/solutions.json` 補上解法（`U` `D` `L` `R` 移動、`W` 等待），並執行驗證工具。

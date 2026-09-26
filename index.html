@@ -37,34 +37,34 @@
         <summary>遊戲規則說明</summary>
         <div class="howto-body">
           <p>場上的文字方塊可以被推動。當它們<strong>由左到右</strong>或<strong>由上到下</strong>排成
-            <code>名詞 IS 屬性</code> 的句子時，規則就會立刻生效；把句子拆開，規則就會消失。</p>
-          <p>讓「YOU」的物體碰到「WIN」的物體就能過關。</p>
+            <code>名詞 是 屬性</code> 的句子時，規則就會立刻生效；把句子拆開，規則就會消失。</p>
+          <p>讓「你」的物體碰到「贏」的物體就能過關。</p>
           <table>
             <thead><tr><th>屬性</th><th>效果</th></tr></thead>
             <tbody>
-              <tr><td><span class="chip" data-p="you">YOU</span></td><td>由你操控</td></tr>
-              <tr><td><span class="chip" data-p="win">WIN</span></td><td>YOU 碰到就過關</td></tr>
-              <tr><td><span class="chip" data-p="stop">STOP</span></td><td>無法穿過</td></tr>
-              <tr><td><span class="chip" data-p="push">PUSH</span></td><td>可以被推動（文字方塊一定可以推）</td></tr>
-              <tr><td><span class="chip" data-p="pull">PULL</span></td><td>會被拉著跟在後面</td></tr>
-              <tr><td><span class="chip" data-p="defeat">DEFEAT</span></td><td>摧毀碰到它的 YOU</td></tr>
-              <tr><td><span class="chip" data-p="sink">SINK</span></td><td>和碰到它的東西一起消失</td></tr>
-              <tr><td><span class="chip" data-p="hot">HOT</span> / <span class="chip" data-p="melt">MELT</span></td><td>HOT 會熔化 MELT</td></tr>
-              <tr><td><span class="chip" data-p="open">OPEN</span> / <span class="chip" data-p="shut">SHUT</span></td><td>兩者相遇時一起消失</td></tr>
-              <tr><td><span class="chip" data-p="move">MOVE</span></td><td>每回合自己往前走，撞到就回頭</td></tr>
-              <tr><td><span class="chip" data-p="float">FLOAT</span></td><td>漂浮，只會碰到同樣漂浮的東西</td></tr>
-              <tr><td><span class="chip" data-p="weak">WEAK</span></td><td>碰到任何東西就壞掉</td></tr>
-              <tr><td><span class="chip" data-p="tele">TELE</span></td><td>把站上來的東西傳送到另一個同類物體</td></tr>
-              <tr><td><span class="chip" data-p="shift">SHIFT</span></td><td>像輸送帶一樣移動上面的東西</td></tr>
+              <tr><td><span class="chip" data-p="you">你</span></td><td>由你操控</td></tr>
+              <tr><td><span class="chip" data-p="win">贏</span></td><td>「你」碰到就過關</td></tr>
+              <tr><td><span class="chip" data-p="stop">停</span></td><td>無法穿過</td></tr>
+              <tr><td><span class="chip" data-p="push">推</span></td><td>可以被推動（文字方塊一定可以推）</td></tr>
+              <tr><td><span class="chip" data-p="pull">拉</span></td><td>會被拉著跟在後面</td></tr>
+              <tr><td><span class="chip" data-p="defeat">擊敗</span></td><td>摧毀碰到它的「你」</td></tr>
+              <tr><td><span class="chip" data-p="sink">沉</span></td><td>和碰到它的東西一起消失</td></tr>
+              <tr><td><span class="chip" data-p="hot">燙</span> / <span class="chip" data-p="melt">融化</span></td><td>「燙」會熔化「融化」的物體</td></tr>
+              <tr><td><span class="chip" data-p="open">開</span> / <span class="chip" data-p="shut">關</span></td><td>兩者相遇時一起消失</td></tr>
+              <tr><td><span class="chip" data-p="move">移動</span></td><td>每回合自己往前走，撞到就回頭</td></tr>
+              <tr><td><span class="chip" data-p="float">漂浮</span></td><td>漂浮，只會碰到同樣漂浮的東西</td></tr>
+              <tr><td><span class="chip" data-p="weak">弱</span></td><td>碰到任何東西就壞掉</td></tr>
+              <tr><td><span class="chip" data-p="tele">傳送</span></td><td>把站上來的東西傳送到另一個同類物體</td></tr>
+              <tr><td><span class="chip" data-p="shift">輸送</span></td><td>像輸送帶一樣移動上面的東西</td></tr>
             </tbody>
           </table>
           <p>進階語法：</p>
           <ul>
-            <li><code>ROCK IS FLAG</code>：把所有石頭變成旗子（<code>X IS X</code> 可防止被變形）。</li>
-            <li><code>BABA AND KEKE IS YOU</code>、<code>FLAG IS WIN AND PUSH</code>：用 AND 連接。</li>
-            <li><code>WALL IS NOT STOP</code>、<code>NOT BABA IS ...</code>：NOT 會否定，並推翻相反的規則。</li>
-            <li><code>ROCK HAS KEY</code>：石頭被摧毀時會留下鑰匙。</li>
-            <li><code>ROCK ON GRASS</code>、<code>ROCK NEAR SKULL</code>、<code>BABA FACING FLAG</code>：條件式規則。</li>
+            <li><code>石頭 是 旗子</code>：把所有石頭變成旗子（<code>巴巴 是 巴巴</code> 可防止被變形）。</li>
+            <li><code>巴巴 和 可可 是 你</code>、<code>旗子 是 贏 和 推</code>：用「和」連接。</li>
+            <li><code>牆 是 非 停</code>、<code>非 巴巴 是 ...</code>：「非」會否定，並推翻相反的規則。</li>
+            <li><code>石頭 有 鑰匙</code>：石頭被摧毀時會留下鑰匙。</li>
+            <li><code>石頭 站在 草</code>、<code>石頭 靠近 骷髏</code>、<code>巴巴 面向 旗子</code>：條件式規則。</li>
           </ul>
           <p>操作：方向鍵或 WASD 移動、空白鍵等待、Z 復原、R 重來、Esc 回選單。</p>
         </div>

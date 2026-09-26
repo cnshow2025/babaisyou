@@ -102,7 +102,7 @@
         if (cat === 'noun') span.className = 'w-noun';
         else if (cat === 'prop') span.style.color = PROP_COLORS[w];
         else span.className = 'w-op';
-        span.textContent = word + ' ';
+        span.textContent = Engine.label(w) + ' ';
         li.appendChild(span);
       }
       list.appendChild(li);

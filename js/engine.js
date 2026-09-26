@@ -10,6 +10,17 @@
   const CONDS = ['on', 'near', 'facing'];
   const VERBS = ['is', 'has'];
   const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+
+  // 文字方塊在畫面上顯示的繁體中文名稱（程式內部仍使用英文代號）。
+  const LABELS = {
+    baba: '巴巴', keke: '可可', flag: '旗子', wall: '牆', rock: '石頭', water: '水',
+    skull: '骷髏', lava: '熔岩', key: '鑰匙', door: '門', grass: '草', text: '文字',
+    is: '是', and: '和', not: '非', has: '有', on: '站在', near: '靠近', facing: '面向',
+    you: '你', win: '贏', stop: '停', push: '推', pull: '拉', defeat: '擊敗',
+    sink: '沉', hot: '燙', melt: '融化', open: '開', shut: '關', move: '移動',
+    float: '漂浮', weak: '弱', tele: '傳送', shift: '輸送',
+  };
+  const label = word => LABELS[word] || word;
   const OPPOSITE = { up: 'down', down: 'up', left: 'right', right: 'left' };
 
   function category(word) {
@@ -556,8 +567,8 @@
   }
 
   const api = {
-    NOUNS, PROPS, CONDS, VERBS, DIRS,
-    category, createState, cloneState, analyze, step, stateKey, ruleToText,
+    NOUNS, PROPS, CONDS, VERBS, DIRS, LABELS,
+    category, label, createState, cloneState, analyze, step, stateKey, ruleToText,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.BabaEngine = api;

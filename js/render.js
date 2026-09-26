@@ -127,7 +127,7 @@
       const color = cat === 'noun' ? COLORS.noun : cat === 'prop' ? PROP_COLORS[o.word] : COLORS.op;
       const active = ctx && ctx.active.has(o.id);
       g.globalAlpha = active ? 1 : 0.42;
-      const label = o.word.toUpperCase();
+      const label = BabaEngine.label(o.word);
       const [jx, jy] = jitter(o.id);
       if (cat === 'prop') {
         g.fillStyle = color;
@@ -137,13 +137,14 @@
       } else {
         g.fillStyle = color;
       }
-      let size = s * 0.36;
-      g.font = `800 ${size}px "Trebuchet MS", "Arial Black", sans-serif`;
+      const font = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif';
+      let size = s * (label.length === 1 ? 0.56 : 0.4);
+      g.font = `900 ${size}px ${font}`;
       const maxW = s * 0.84;
       const w = g.measureText(label).width;
       if (w > maxW) {
         size *= maxW / w;
-        g.font = `800 ${size}px "Trebuchet MS", "Arial Black", sans-serif`;
+        g.font = `900 ${size}px ${font}`;
       }
       g.textAlign = 'center';
       g.textBaseline = 'middle';
